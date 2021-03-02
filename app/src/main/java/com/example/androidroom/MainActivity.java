@@ -1,15 +1,26 @@
 package com.example.androidroom;
 
+import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.room.Room;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static String[] terminosBusqueda = {"L", "no", "3", "6", "9", "e"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +29,50 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(getApplicationContext(), CreateActivity.class));
             }
         });
+
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateContactsList(); // your code
+                pullToRefresh.setRefreshing(false);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateContactsList();
+    }
+
+    private void updateContactsList()
+    {
+        String busqueda = null;
+        if (0 == ((int) Math.round(Math.random()))) {
+            busqueda = terminosBusqueda[(int) Math.round(Math.random() * (terminosBusqueda.length-1))];
+        }
+
+        DB db = Room.databaseBuilder(getApplicationContext(), DB.class, String.valueOf(R.string.database)).allowMainThreadQueries().build();
+
+        List<Contacto> contactos = busqueda == null ? db.contactoDao().obtenerTodos() : db.contactoDao().obtenerPorBusqueda(busqueda);
+
+        TextView textView = (TextView) findViewById(R.id.busqueda);
+        textView.setText(busqueda != null ? "Término de búsqueda: "+busqueda : null);
+
+        ArrayAdapter<Contacto> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactos);
+
+        ListView listView = (ListView) findViewById(R.id.list);
+
+        listView.setAdapter(adapter);
     }
 
     @Override

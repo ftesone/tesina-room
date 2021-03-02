@@ -12,6 +12,10 @@ public class DateConverter {
     @TypeConverter
     public String dateToString(Date fecha)
     {
+        if (fecha == null) {
+            return null;
+        }
+
         DateFormat df = new SimpleDateFormat(this.dateFormat);
 
         return df.format(fecha);
@@ -20,6 +24,10 @@ public class DateConverter {
     @TypeConverter
     public Date stringToDate(String fecha)
     {
+        if (fecha == null) {
+            return null;
+        }
+
         DateFormat df = new SimpleDateFormat(this.dateFormat);
 
         try {
