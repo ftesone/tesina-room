@@ -36,8 +36,13 @@ public interface ContactoDao {
     List<Contacto> obtenerPorBusqueda(String termino);
 
     @Transaction
-    @Query("SELECT * FROM contacto WHERE id=:id")
-    ContactoConRelaciones obtenerUnoConTelefonos(int id);
+    @Query(
+        "SELECT * " +
+        "FROM contacto " +
+        "INNER JOIN telefono ON telefono.contactoId = contacto.id " +
+        "WHERE telefono.tipo = 'movil'"
+    )
+    List<ContactoConTelefonos> obtenerConTelefonoMovil();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertar(Contacto contacto);

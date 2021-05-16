@@ -107,7 +107,7 @@ public class CreateActivity extends AppCompatActivity {
         for (int i=0, j=random(0,4) ; i<=j ; i++) {
             Email email = new Email();
             email.contactoId = id;
-            email.email = contacto.nombre.charAt(0) + contacto.apellido.toLowerCase() + (i==0 ? "" : i) + "@mail.com";
+            email.email = contacto.nombre.toLowerCase().charAt(0) + contacto.apellido.toLowerCase() + (i==0 ? "" : i) + "@mail.com";
             emails.add(email);
         }
 
