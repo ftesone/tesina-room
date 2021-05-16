@@ -25,7 +25,10 @@ public interface ContactoDao {
             "OR contacto.fechaNacimiento LIKE '%' || :termino || '%' " +
             "OR contacto.apodo LIKE '%' || :termino || '%' " +
             "OR contacto.empresa LIKE '%' || :termino || '%' " +
-            "OR contacto.direccion LIKE '%' || :termino || '%' " +
+            "OR contacto.direccion_calle LIKE '%' || :termino || '%' " +
+            "OR contacto.direccion_nro LIKE '%' || :termino || '%' " +
+            "OR contacto.direccion_piso LIKE '%' || :termino || '%' " +
+            "OR contacto.direccion_depto LIKE '%' || :termino || '%' " +
             "OR telefono.numero LIKE '%' || :termino || '%' " +
             "OR email.email LIKE '%' || :termino || '%'" +
         "ORDER BY apellido, nombre"

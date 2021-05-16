@@ -19,7 +19,10 @@ public class Contacto {
     public Date fechaNacimiento;
     public String apodo;
     public String empresa;
-    public Direccion direccion;
+    public String direccion_calle;
+    public String direccion_nro;
+    public String direccion_piso;
+    public String direccion_depto;
 
     @NonNull
     @Override
@@ -39,16 +42,16 @@ public class Contacto {
             s.append(" @"+empresa);
         }
         
-        if (direccion != null) {
-            s.append(" Dir: " + direccion.calle +" "+ direccion.nro);
+        if (direccion_calle != null) {
+            s.append(" Dir: " + direccion_calle +" "+ direccion_nro);
 
-            if (direccion.piso != null || direccion.depto != null) {
+            if (direccion_piso != null || direccion_depto != null) {
                 s.append(" ");
-                if (direccion.piso != null) {
-                    s.append(direccion.piso);
+                if (direccion_piso != null) {
+                    s.append(direccion_piso);
                 }
-                if (direccion.depto != null) {
-                    s.append(direccion.depto);
+                if (direccion_depto != null) {
+                    s.append(direccion_depto);
                 }
             }
         }

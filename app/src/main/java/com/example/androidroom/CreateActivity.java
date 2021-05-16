@@ -43,18 +43,17 @@ public class CreateActivity extends AppCompatActivity {
             empresa = empresas[random(0, empresas.length-1)];
         }
 
-        Direccion direccion = null;
+        String direccion_calle = null, direccion_nro = null, direccion_piso = null, direccion_depto = null;
         if (0 == random(0,3)) {
-            direccion = new Direccion();
-            direccion.calle = String.valueOf(random(1, 72));
-            direccion.nro = String.valueOf(random(100, 1000));
+            direccion_calle = String.valueOf(random(1, 72));
+            direccion_nro = String.valueOf(random(100, 1000));
 
             if (0 != random(0,2)) {
-                direccion.piso = random(1,15) + "º";
+                direccion_piso = random(1,15) + "º";
             }
 
             if (0 != random(0,2)) {
-                direccion.depto = String.valueOf((char) random(65,70));
+                direccion_depto = String.valueOf((char) random(65,70));
             }
         }
 
@@ -76,8 +75,17 @@ public class CreateActivity extends AppCompatActivity {
             contacto.empresa = empresa;
         }
 
-        if (direccion != null) {
-            contacto.direccion = direccion;
+        if (direccion_calle != null) {
+            contacto.direccion_calle = direccion_calle;
+            contacto.direccion_nro = direccion_nro;
+
+            if (direccion_piso != null) {
+                contacto.direccion_piso = direccion_piso;
+            }
+
+            if (direccion_depto != null) {
+                contacto.direccion_depto = direccion_depto;
+            }
         }
 
         long id = db.contactoDao().insertar(contacto);
