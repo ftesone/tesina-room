@@ -5,7 +5,9 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Contacto {
@@ -17,6 +19,7 @@ public class Contacto {
     public Date fechaNacimiento;
     public String apodo;
     public String empresa;
+    public Direccion direccion;
 
     @NonNull
     @Override
@@ -34,6 +37,20 @@ public class Contacto {
 
         if (empresa != null) {
             s.append(" @"+empresa);
+        }
+        
+        if (direccion != null) {
+            s.append(" Dir: " + direccion.calle +" "+ direccion.nro);
+
+            if (direccion.piso != null || direccion.depto != null) {
+                s.append(" ");
+                if (direccion.piso != null) {
+                    s.append(direccion.piso);
+                }
+                if (direccion.depto != null) {
+                    s.append(direccion.depto);
+                }
+            }
         }
 
         return s.toString();

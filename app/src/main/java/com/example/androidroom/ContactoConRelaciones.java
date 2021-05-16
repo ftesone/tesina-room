@@ -5,10 +5,13 @@ import androidx.room.Relation;
 
 import java.util.List;
 
-public class ContactoConTelefonos {
+public class ContactoConRelaciones {
     @Embedded
     public Contacto contacto;
 
     @Relation(parentColumn = "id", entityColumn = "contactoId")
     public List<Telefono> telefonos;
+
+    @Relation(parentColumn = "id", entityColumn = "contactoId")
+    public List<Email> emails;
 }

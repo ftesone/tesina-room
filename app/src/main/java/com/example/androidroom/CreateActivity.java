@@ -43,6 +43,21 @@ public class CreateActivity extends AppCompatActivity {
             empresa = empresas[random(0, empresas.length-1)];
         }
 
+        Direccion direccion = null;
+        if (0 == random(0,3)) {
+            direccion = new Direccion();
+            direccion.calle = String.valueOf(random(1, 72));
+            direccion.nro = String.valueOf(random(100, 1000));
+
+            if (0 != random(0,2)) {
+                direccion.piso = random(1,15) + "º";
+            }
+
+            if (0 != random(0,2)) {
+                direccion.depto = String.valueOf((char) random(65,70));
+            }
+        }
+
         DB db = Room.databaseBuilder(getApplicationContext(), DB.class, String.valueOf(R.string.database)).allowMainThreadQueries().build();
 
         Contacto contacto = new Contacto();
@@ -61,6 +76,10 @@ public class CreateActivity extends AppCompatActivity {
             contacto.empresa = empresa;
         }
 
+        if (direccion != null) {
+            contacto.direccion = direccion;
+        }
+
         long id = db.contactoDao().insertar(contacto);
 
         List<Telefono> telefonos = new ArrayList<>();
@@ -76,12 +95,28 @@ public class CreateActivity extends AppCompatActivity {
             db.telefonoDao().insertar(telefonos.toArray(new Telefono[telefonos.size()]));
         }
 
+        List<Email> emails = new ArrayList<>();
+        for (int i=0, j=random(0,4) ; i<=j ; i++) {
+            Email email = new Email();
+            email.contactoId = id;
+            email.email = contacto.nombre.charAt(0) + contacto.apellido.toLowerCase() + (i==0 ? "" : i) + "@mail.com";
+            emails.add(email);
+        }
+
+        if (!emails.isEmpty()) {
+            db.emailDao().insertar(emails.toArray(new Email[emails.size()]));
+        }
+
         TextView textView = (TextView) findViewById(R.id.contacto);
         textView.setText(contacto.toString());
 
         ArrayAdapter<Telefono> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, telefonos);
         ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(adapter);
+
+        ArrayAdapter<Email> emailAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, emails);
+        ListView listViewEmail = (ListView) findViewById(R.id.emails);
+        listViewEmail.setAdapter(emailAdapter);
     }
 
     private int random(int start, int end)

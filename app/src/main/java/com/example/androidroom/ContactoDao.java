@@ -19,19 +19,22 @@ public interface ContactoDao {
         "SELECT DISTINCT contacto.* " +
         "FROM contacto " +
             "LEFT JOIN telefono ON telefono.contactoId = contacto.id " +
-        "WHERE apellido LIKE '%' || :termino || '%' " +
-            "OR nombre LIKE '%' || :termino || '%' " +
-            "OR fechaNacimiento LIKE '%' || :termino || '%' " +
-            "OR apodo LIKE '%' || :termino || '%' " +
-            "OR empresa LIKE '%' || :termino || '%' " +
-            "OR numero LIKE '%' || :termino || '%' " +
+            "LEFT JOIN email ON email.contactoId = contacto.id " +
+        "WHERE contacto.apellido LIKE '%' || :termino || '%' " +
+            "OR contacto.nombre LIKE '%' || :termino || '%' " +
+            "OR contacto.fechaNacimiento LIKE '%' || :termino || '%' " +
+            "OR contacto.apodo LIKE '%' || :termino || '%' " +
+            "OR contacto.empresa LIKE '%' || :termino || '%' " +
+            "OR contacto.direccion LIKE '%' || :termino || '%' " +
+            "OR telefono.numero LIKE '%' || :termino || '%' " +
+            "OR email.email LIKE '%' || :termino || '%'" +
         "ORDER BY apellido, nombre"
     )
     List<Contacto> obtenerPorBusqueda(String termino);
 
     @Transaction
     @Query("SELECT * FROM contacto WHERE id=:id")
-    ContactoConTelefonos obtenerUnoConTelefonos(int id);
+    ContactoConRelaciones obtenerUnoConTelefonos(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertar(Contacto contacto);
